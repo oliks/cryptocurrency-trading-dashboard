@@ -125,7 +125,7 @@ class App(ctk.CTk):
         # Balances Frame
         self.balances = ctk.CTkFrame(self, corner_radius=0, fg_color="transparent")
         
-        self.my_frame = ctk.CTkScrollableFrame(master=self.balances, width=700, height=200, corner_radius=0, fg_color="transparent")
+        self.my_frame = ctk.CTkScrollableFrame(master=self.balances, width=700, height=600, corner_radius=0, fg_color="transparent")
         self.my_frame.grid(row=0, column=0, sticky="nsew")
         self.asset_image = ctk.CTkLabel(self.my_frame, text="Asset Image")
         self.asset_image.grid(row=0, column=0, padx=20, pady=10)
@@ -260,12 +260,14 @@ class App(ctk.CTk):
     def addbalances(self):
         data = getAccountInfos(self.apikey.get(), self.apisecret.get())
         image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "imgs")
+        print(data)
         for i in range(len(data)):  # add items with images
             try:
                 logo_image = ctk.CTkImage(light_image=Image.open(os.path.join(image_path, data['asset'].iloc[i]+".png")), size=(20, 20))
             except:
                 logo_image = ctk.CTkImage(light_image=Image.open(os.path.join(image_path, "btc.png")), size=(20, 20))
-                
+            
+            data['asset'].iloc[i]
             img = ctk.CTkLabel(self.my_frame, text="", image=logo_image)
             img.grid(row=i+1, column=0, padx=20, pady=10)
                 
