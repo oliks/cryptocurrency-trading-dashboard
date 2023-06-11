@@ -2,7 +2,7 @@
 
 Cryptocurrency Trading Dashboard is an open-source application developed by Oliver Slapal. This README provides instructions on how to set up and use the application.
 
-![CTD](https://imgur.com/a/fVUpH0u)
+![CTD](https://i.imgur.com/a9IzWYB.png)
 
 ## Setup
 
