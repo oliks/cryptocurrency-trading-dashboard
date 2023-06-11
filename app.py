@@ -36,6 +36,7 @@ class App(ctk.CTk):
         self.volume = tkinter.StringVar()
         self.trades = tkinter.StringVar()
         self.experimental = tkinter.StringVar().set('off')
+        self.fig, self.ax = plt.subplots()
         self.load_config()
                 
         # set grid layout 1x2
@@ -238,6 +239,11 @@ class App(ctk.CTk):
             self.settings_status.set("There was an error.")
             
     def pulldata(self, symbol="BTCUSDT"):
+        try:
+            plt.cla()
+            print("yes")
+        except:
+            print("no")
         data = GetHistoricalData(symbol, self.apikey.get(), self.apisecret.get())
         self.lastprice.set(str(data['close'].iloc[-1])+"$")
         self.change.set(str(round(((data['close'].iloc[0] - data['close'].iloc[-1])/data['close'].iloc[0])*100, 3))+"%")
@@ -245,17 +251,16 @@ class App(ctk.CTk):
         self.trades.set(str(data['numberOfTrades'].sum()))
 
            # open figure + axis
-        fig, ax = plt.subplots()
         # plot data
-        ax.plot(data.index, data['close'])
+        self.ax.plot(data.index, data['close'])
         # rotate x-tick-labels by 90°
-        ax.tick_params(axis='x',rotation=90)
-        ax.set_xticks([data.index[0], data.index[int(len(data.index)/2)], data.index[-1]], ["-24h", "-12h", "now"])
-        canvas = FigureCanvasTkAgg(fig, self.dashboard)
-        canvas.draw()
-        canvas.get_tk_widget().grid(row=5, column=0, padx=20, pady=10, columnspan=5)
+        self.ax.tick_params(axis='x',rotation=90)
+        self.ax.set_xticks([data.index[0], data.index[int(len(data.index)/2)], data.index[-1]], ["-24h", "-12h", "now"])
+        self.canvas = FigureCanvasTkAgg(self.fig, self.dashboard)
+        self.canvas.draw()
+        self.canvas.get_tk_widget().grid(row=5, column=0, padx=20, pady=10, columnspan=5)
         
-        self.after(60000,self.pulldata)
+        self.after(600,self.pulldata)
         
     def addbalances(self):
         data = getAccountInfos(self.apikey.get(), self.apisecret.get())
